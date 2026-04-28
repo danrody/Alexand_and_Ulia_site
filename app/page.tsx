@@ -24,8 +24,8 @@ const timeline = [
   },
   {
     time: "далее",
-    title: "ужин и танцы",
-    text: "еда, веселье, поздравления и праздник до позднего вечера"
+    title: "еда, веселье, празднования",
+    text: ""
   }
 ];
 
@@ -75,6 +75,9 @@ const qrPattern = [
   "1110111011101"
 ];
 
+// Replace this with the real Telegram invite URL when it is available.
+const telegramChatUrl = "https://t.me/";
+
 function HeartMark({ className = "" }: { className?: string }) {
   return (
     <svg
@@ -87,6 +90,49 @@ function HeartMark({ className = "" }: { className?: string }) {
         d="M41.6 68.3C28.8 55.8 7 43.2 7 23.7C7 13.7 14.4 6.6 23.8 6.6C31 6.6 36.4 10.4 41.6 16.7C46.8 10.4 52.2 6.6 59.4 6.6C68.8 6.6 76.2 13.7 76.2 23.7C76.2 43.2 54.4 55.8 41.6 68.3Z"
         stroke="currentColor"
         strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function FilledHeart({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      viewBox="0 0 92 80"
+      fill="none"
+    >
+      <path
+        d="M46 72C30 56 8 43 8 24C8 12 17 6 28 7C36 8 42 14 46 23C52 13 61 7 72 10C82 13 87 23 84 35C80 52 62 60 46 72Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+function SketchHeart({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      viewBox="0 0 92 80"
+      fill="none"
+    >
+      <path
+        d="M45 72C31 58 8 45 8 25C8 13 17 7 28 8C36 9 42 15 46 23C52 13 61 7 71 10C81 13 87 23 84 35C80 52 61 60 45 72Z"
+        stroke="currentColor"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        className="sketch-heart-secondary"
+        d="M43 70C29 56 11 45 12 26C13 16 20 10 29 10C37 10 42 17 46 24C51 16 59 10 69 12C78 14 83 23 81 34C78 50 60 60 43 70Z"
+        stroke="currentColor"
+        strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -157,22 +203,27 @@ function LeafSprig({ className = "" }: { className?: string }) {
 function Polaroid({
   label,
   initials,
+  quote,
   rotate
 }: {
   label: string;
   initials: string;
+  quote: string;
   rotate: string;
 }) {
   return (
-    <figure
-      className="polaroid"
-      style={{ "--polaroid-rotate": rotate } as CSSProperties}
-    >
-      <div className="photo-placeholder">
-        <span>{initials}</span>
-      </div>
-      <figcaption>{label}</figcaption>
-    </figure>
+    <div className="polaroid-stack">
+      <p className="polaroid-quote">{quote}</p>
+      <figure
+        className="polaroid"
+        style={{ "--polaroid-rotate": rotate } as CSSProperties}
+      >
+        <div className="photo-placeholder">
+          <span>{initials}</span>
+        </div>
+        <figcaption>{label}</figcaption>
+      </figure>
+    </div>
   );
 }
 
@@ -195,11 +246,9 @@ function Calendar() {
         {days.map((day) => (
           <div
             key={day}
-            className={`calendar-day ${day === 26 ? "soft-ring" : ""} ${
-              day === 29 ? "heart-day" : ""
-            }`}
+            className={`calendar-day ${day === 29 ? "heart-day" : ""}`}
           >
-            {day === 29 && <HeartMark className="heart-outline" />}
+            {day === 29 && <SketchHeart className="heart-outline" />}
             <span>{day}</span>
           </div>
         ))}
@@ -216,7 +265,7 @@ function Calendar() {
 
 function DressPalette() {
   return (
-    <div className="palette" aria-label="Цветовая гамма дресс-кода">
+    <div className="palette" aria-label="Цветовая гамма">
       {palette.map((item) => (
         <span key={item.name} title={item.name} style={{ background: item.color }} />
       ))}
@@ -229,29 +278,28 @@ function Timeline() {
     <div className="timeline-wrap">
       <svg
         className="timeline-curve"
-        viewBox="0 0 760 560"
+        viewBox="0 0 760 720"
         preserveAspectRatio="none"
         aria-hidden="true"
       >
         <path
           className="timeline-curve-path"
-          d="M210 10C214 86 150 100 128 150C98 218 121 250 114 306C106 386 56 426 120 480C168 520 248 540 338 526"
+          d="M382 18C210 42 156 124 218 184C286 248 500 174 562 246C642 338 560 448 430 452C252 456 166 506 228 574C264 620 326 612 380 638"
           fill="none"
           stroke="currentColor"
-          strokeWidth="3"
+          strokeWidth="4"
           strokeLinecap="round"
         />
       </svg>
-      <HeartMark className="timeline-end-heart" />
-      {timeline.map((item, index) => (
+      <FilledHeart className="timeline-finish-heart" />
+      {timeline.map((item) => (
         <article className="timeline-item" key={item.time}>
           <div className="timeline-time-wrap">
-            <span className="timeline-index">0{index + 1}</span>
             <time>{item.time}</time>
           </div>
           <div className="timeline-copy">
             <h3>{item.title}</h3>
-            <p>{item.text}</p>
+            {item.text && <p>{item.text}</p>}
           </div>
         </article>
       ))}
@@ -261,7 +309,13 @@ function Timeline() {
 
 function QrCode() {
   return (
-    <div className="qr-frame" aria-label="QR-код Telegram-чата">
+    <a
+      className="qr-frame"
+      href={telegramChatUrl}
+      target="_blank"
+      rel="noreferrer"
+      aria-label="Открыть Telegram-чат праздника"
+    >
       <div className="qr-code">
         {qrPattern.flatMap((row, rowIndex) =>
           row.split("").map((cell, columnIndex) => (
@@ -273,7 +327,7 @@ function QrCode() {
         )}
       </div>
       <span className="qr-caption">telegram</span>
-    </div>
+    </a>
   );
 }
 
@@ -324,7 +378,6 @@ export default function Home() {
             </div>
 
             <div className="hero-copy">
-              <p className="script-small">наконец-то</p>
               <h1>
                 <span>Мы</span>
                 <span>женимся</span>
@@ -336,8 +389,18 @@ export default function Home() {
             </div>
 
             <div className="polaroid-row" aria-label="Детские фотографии">
-              <Polaroid label="жених" initials="А" rotate="-7deg" />
-              <Polaroid label="невеста" initials="Ю" rotate="5deg" />
+              <Polaroid
+                label="невеста"
+                initials="Ю"
+                quote="- интересно, кто будет моим мужем, когда я вырасту?"
+                rotate="-7deg"
+              />
+              <Polaroid
+                label="жених"
+                initials="А"
+                quote="- им буду я!"
+                rotate="5deg"
+              />
             </div>
           </div>
 
@@ -352,13 +415,9 @@ export default function Home() {
           <LeafSprig className="intro-sprig" />
           <div className="section-inner intro-inner reveal-stack">
             <div className="section-label">дорогие друзья и близкие</div>
-            <h2 className="section-title">Мы будем счастливы видеть вас рядом</h2>
             <div className="intro-text">
               <p>
-                <strong>26.06.26</strong> состоится наше бракосочетание.
-              </p>
-              <p>
-                <strong>29.06.26</strong> приглашаем вас отметить день рождения
+                <strong>29.06.2026</strong> приглашаем вас отметить день рождения
                 нашей семьи в тёплой загородной атмосфере.
               </p>
             </div>
@@ -369,10 +428,10 @@ export default function Home() {
           <div className="section-inner calendar-layout reveal-stack">
             <div className="calendar-copy">
               <span className="section-label">дата праздника</span>
-              <h2 className="section-title">29 июня 2026</h2>
+              <h2 className="section-title">29.06.2026</h2>
               <p>
                 Отметьте этот понедельник в календаре: нас ждёт вечер с церемонией,
-                ужином, поздравлениями и танцами.
+                едой, весельем и празднованием.
               </p>
             </div>
             <Calendar />
@@ -409,9 +468,7 @@ export default function Home() {
         <section className="dress-section section-pad flow-section">
           <LeafSprig className="dress-sprig" />
           <div className="section-inner dress-layout reveal-stack">
-            <div>
-              <span className="section-label">дресс-код</span>
-              <h2 className="section-title">Природные пастельные оттенки</h2>
+            <div className="dress-copy">
               <p>
                 Так как праздник пройдёт в загородном формате, нам будет особенно
                 приятно, если вы поддержите атмосферу и выберете наряды из лёгких
