@@ -34,19 +34,28 @@ const houseCards = [
     title: "Дом",
     text: "место праздника",
     image: "/images/house.png",
-    alt: "Дом, где пройдёт свадебный праздник"
-  },
-  {
-    title: "Двор",
-    text: "фото скоро"
+    alt: "Дом, где пройдёт свадебный праздник",
+    width: 1119,
+    height: 1008,
+    position: "center"
   },
   {
     title: "Терраса",
-    text: "фото скоро"
+    text: "вид на дом",
+    image: "/images/house-terrace.png",
+    alt: "Вид на дом с террасы",
+    width: 1123,
+    height: 1021,
+    position: "center"
   },
   {
-    title: "Зона отдыха",
-    text: "фото скоро"
+    title: "Баня",
+    text: "зона отдыха",
+    image: "/images/house-banya.png",
+    alt: "Баня в доме",
+    width: 1112,
+    height: 1040,
+    position: "center"
   }
 ];
 
@@ -65,33 +74,6 @@ const qrPattern = [
   "1001100101011",
   "1110111011101"
 ];
-
-function Daisy({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      className={`daisy ${className}`}
-      viewBox="0 0 120 120"
-      fill="none"
-    >
-      <g opacity="0.92">
-        {Array.from({ length: 12 }).map((_, index) => (
-          <ellipse
-            key={index}
-            cx="60"
-            cy="26"
-            rx="11"
-            ry="25"
-            fill="#fffaf1"
-            transform={`rotate(${index * 30} 60 60)`}
-          />
-        ))}
-        <circle cx="60" cy="60" r="16" fill="#c9ad63" />
-        <circle cx="55" cy="55" r="4" fill="#8d7439" opacity="0.35" />
-      </g>
-    </svg>
-  );
-}
 
 function HeartMark({ className = "" }: { className?: string }) {
   return (
@@ -246,31 +228,31 @@ function Timeline() {
   return (
     <div className="timeline-wrap">
       <svg
-        className="timeline-line"
-        viewBox="0 0 100 420"
+        className="timeline-curve"
+        viewBox="0 0 760 560"
         preserveAspectRatio="none"
         aria-hidden="true"
       >
         <path
-          d="M50 4C86 58 13 94 46 145C84 205 18 229 51 287C80 338 41 370 54 416"
+          className="timeline-curve-path"
+          d="M210 10C214 86 150 100 128 150C98 218 121 250 114 306C106 386 56 426 120 480C168 520 248 540 338 526"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="3"
           strokeLinecap="round"
-          strokeDasharray="4 8"
         />
       </svg>
+      <HeartMark className="timeline-end-heart" />
       {timeline.map((item, index) => (
         <article className="timeline-item" key={item.time}>
-          <span className="timeline-heart" aria-hidden="true">
-            ♥
-          </span>
-          <div>
+          <div className="timeline-time-wrap">
+            <span className="timeline-index">0{index + 1}</span>
             <time>{item.time}</time>
+          </div>
+          <div className="timeline-copy">
             <h3>{item.title}</h3>
             <p>{item.text}</p>
           </div>
-          <span className="timeline-index">0{index + 1}</span>
         </article>
       ))}
     </div>
@@ -300,23 +282,23 @@ function HouseCarousel() {
     <div className="house-carousel" aria-label="Фотографии дома">
       {houseCards.map((card, index) => (
         <figure
-          className={`house-card ${card.image ? "has-photo" : "is-placeholder"}`}
+          className="house-card"
           key={card.title}
-          style={{ "--card-delay": `${index * -5}s` } as CSSProperties}
+          style={
+            {
+              "--card-delay": `${index * -6}s`,
+              "--image-position": card.position
+            } as CSSProperties
+          }
         >
-          {card.image ? (
-            <Image
-              src={card.image}
-              alt={card.alt}
-              width={1119}
-              height={1008}
-              priority
-            />
-          ) : (
-            <div className="house-placeholder" aria-hidden="true">
-              <span>{index + 1}</span>
-            </div>
-          )}
+          <Image
+            src={card.image}
+            alt={card.alt}
+            width={card.width}
+            height={card.height}
+            priority
+            sizes="(max-width: 900px) 100vw, 58vw"
+          />
           <figcaption>
             <strong>{card.title}</strong>
             <span>{card.text}</span>
@@ -335,8 +317,6 @@ export default function Home() {
       <div className="invitation-canvas">
         <section className="hero-section paper-texture flow-section">
           <FlowRibbon className="hero-ribbon" />
-          <Daisy className="hero-daisy-one" />
-          <Daisy className="hero-daisy-two" />
           <div className="section-inner hero-inner">
             <div className="topline">
               <span>свадебное приглашение</span>
@@ -386,7 +366,6 @@ export default function Home() {
         </section>
 
         <section className="calendar-section section-pad flow-section">
-          <Daisy className="calendar-daisy" />
           <div className="section-inner calendar-layout reveal-stack">
             <div className="calendar-copy">
               <span className="section-label">дата праздника</span>
@@ -466,14 +445,16 @@ export default function Home() {
         </section>
 
         <section className="final-section paper-texture flow-section">
-          <Daisy className="final-daisy-one" />
-          <Daisy className="final-daisy-two" />
           <FlowRibbon className="final-ribbon" />
           <div className="section-inner final-inner reveal-stack">
             <figure className="couple-photo">
-              <div>
-                <span>А + Ю</span>
-              </div>
+              <Image
+                src="/images/family.png"
+                alt="Александр и Юлия"
+                width={732}
+                height={1028}
+                sizes="(max-width: 700px) 88vw, 560px"
+              />
             </figure>
             <p className="final-script">Ждём вас</p>
             <h2>с любовью, Александр и Юлия</h2>
