@@ -617,10 +617,12 @@ select {
 .timeline-line {
   position: absolute;
   top: -24px;
-  left: clamp(26px, 5vw, 64px);
+  left: 23px;
+  z-index: 0;
   width: 78px;
   height: calc(100% + 50px);
   color: rgba(255, 250, 243, 0.34);
+  transform: translateX(-50%);
 }
 
 .timeline-line path {
@@ -630,6 +632,7 @@ select {
 
 .timeline-item {
   position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 54px minmax(0, 1fr) auto;
   gap: clamp(14px, 4vw, 28px);
@@ -710,6 +713,7 @@ select {
 .address-line {
   display: inline-flex;
   align-items: center;
+  max-width: 540px;
   min-height: 42px;
   margin: 28px 0 0;
   padding: 8px 0;
@@ -717,17 +721,41 @@ select {
   color: rgba(59, 47, 38, 0.64);
   font-size: clamp(1.05rem, 1.8vw, 1.25rem);
   line-height: 1.4;
+  text-decoration: none;
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease;
 }
 
-.house-photo {
+.address-line:hover,
+.address-line:focus-visible {
+  border-color: rgba(80, 103, 68, 0.58);
+  color: var(--moss);
+  outline: none;
+}
+
+.house-carousel {
   position: relative;
-  overflow: hidden;
-  border-radius: 8px;
-  box-shadow: 0 28px 78px rgba(59, 47, 38, 0.16);
-  transform: rotate(1deg);
+  min-height: clamp(360px, 48vw, 620px);
+  perspective: 1100px;
 }
 
-.house-photo::after {
+.house-card {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid rgba(59, 47, 38, 0.1);
+  border-radius: 8px;
+  background: #fffaf3;
+  box-shadow: 0 28px 78px rgba(59, 47, 38, 0.16);
+  transform-origin: center 82%;
+  animation: house-card-cycle 20s ease-in-out infinite;
+  animation-delay: var(--card-delay, 0s);
+  will-change: transform, opacity;
+}
+
+.house-card::after {
   position: absolute;
   inset: 0;
   content: "";
@@ -737,16 +765,71 @@ select {
   pointer-events: none;
 }
 
-.house-photo img {
+.house-card img,
+.house-placeholder {
   width: 100%;
-  height: clamp(330px, 48vw, 620px);
-  object-fit: cover;
-  object-position: center;
-  transition: transform 0.8s ease;
+  height: 100%;
 }
 
-.house-photo:hover img {
-  transform: scale(1.035);
+.house-card img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.house-placeholder {
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 34% 24%, rgba(255, 250, 243, 0.86), transparent 23%),
+    linear-gradient(145deg, rgba(220, 197, 188, 0.72), rgba(197, 207, 179, 0.76)),
+    repeating-linear-gradient(135deg, rgba(255, 250, 243, 0.28) 0 1px, transparent 1px 18px);
+}
+
+.house-placeholder span {
+  display: grid;
+  width: clamp(78px, 13vw, 122px);
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgba(59, 47, 38, 0.22);
+  border-radius: 50%;
+  color: rgba(59, 47, 38, 0.58);
+  font-family:
+    "Segoe Print",
+    "Bradley Hand",
+    "Comic Sans MS",
+    cursive;
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
+}
+
+.house-card figcaption {
+  position: absolute;
+  right: clamp(14px, 3vw, 28px);
+  bottom: clamp(14px, 3vw, 28px);
+  left: clamp(14px, 3vw, 28px);
+  z-index: 2;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  color: #fffaf3;
+  text-shadow: 0 8px 24px rgba(39, 35, 29, 0.32);
+}
+
+.house-card figcaption strong {
+  font-size: clamp(1.45rem, 3.5vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.house-card figcaption span {
+  color: rgba(255, 250, 243, 0.82);
+  font-size: clamp(0.86rem, 1.4vw, 1.02rem);
+  line-height: 1.2;
+  text-align: right;
+}
+
+.house-carousel:hover .house-card {
+  animation-play-state: paused;
 }
 
 .dress-section {
@@ -1085,6 +1168,38 @@ select {
   }
 }
 
+@keyframes house-card-cycle {
+  0%,
+  18% {
+    z-index: 4;
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(1deg) scale(1);
+  }
+  23%,
+  43% {
+    z-index: 3;
+    opacity: 0.88;
+    transform: translate3d(18px, 18px, -44px) rotate(4deg) scale(0.96);
+  }
+  48%,
+  68% {
+    z-index: 2;
+    opacity: 0.66;
+    transform: translate3d(-16px, 28px, -84px) rotate(-3deg) scale(0.92);
+  }
+  73%,
+  93% {
+    z-index: 1;
+    opacity: 0.42;
+    transform: translate3d(10px, 34px, -124px) rotate(2deg) scale(0.88);
+  }
+  100% {
+    z-index: 4;
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(1deg) scale(1);
+  }
+}
+
 @keyframes ambient-drift {
   0%,
   100% {
@@ -1110,8 +1225,8 @@ select {
     margin-inline: auto;
   }
 
-  .house-photo {
-    transform: rotate(0deg);
+  .house-carousel {
+    min-height: clamp(330px, 72vw, 560px);
   }
 
   .palette {
@@ -1214,7 +1329,7 @@ select {
   }
 
   .timeline-line {
-    left: 12px;
+    left: 19px;
   }
 
   .details-note,

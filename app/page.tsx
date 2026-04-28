@@ -29,6 +29,27 @@ const timeline = [
   }
 ];
 
+const houseCards = [
+  {
+    title: "Дом",
+    text: "место праздника",
+    image: "/images/house.png",
+    alt: "Дом, где пройдёт свадебный праздник"
+  },
+  {
+    title: "Двор",
+    text: "фото скоро"
+  },
+  {
+    title: "Терраса",
+    text: "фото скоро"
+  },
+  {
+    title: "Зона отдыха",
+    text: "фото скоро"
+  }
+];
+
 const qrPattern = [
   "1111111001111",
   "1000001000101",
@@ -107,6 +128,7 @@ function FlowRibbon({ className = "" }: { className?: string }) {
         strokeLinecap="round"
       />
       <path
+        transform="translate(0 -32)"
         d="M312 116C299 104 278 92 278 73C278 62 286 54 297 54C304 54 309 58 312 63C316 58 321 54 328 54C339 54 347 62 347 73C347 92 326 104 312 116Z"
         fill="currentColor"
       />
@@ -223,7 +245,12 @@ function DressPalette() {
 function Timeline() {
   return (
     <div className="timeline-wrap">
-      <svg className="timeline-line" viewBox="0 0 100 420" aria-hidden="true">
+      <svg
+        className="timeline-line"
+        viewBox="0 0 100 420"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
         <path
           d="M50 4C86 58 13 94 46 145C84 205 18 229 51 287C80 338 41 370 54 416"
           fill="none"
@@ -264,6 +291,38 @@ function QrCode() {
         )}
       </div>
       <span className="qr-caption">telegram</span>
+    </div>
+  );
+}
+
+function HouseCarousel() {
+  return (
+    <div className="house-carousel" aria-label="Фотографии дома">
+      {houseCards.map((card, index) => (
+        <figure
+          className={`house-card ${card.image ? "has-photo" : "is-placeholder"}`}
+          key={card.title}
+          style={{ "--card-delay": `${index * -5}s` } as CSSProperties}
+        >
+          {card.image ? (
+            <Image
+              src={card.image}
+              alt={card.alt}
+              width={1119}
+              height={1008}
+              priority
+            />
+          ) : (
+            <div className="house-placeholder" aria-hidden="true">
+              <span>{index + 1}</span>
+            </div>
+          )}
+          <figcaption>
+            <strong>{card.title}</strong>
+            <span>{card.text}</span>
+          </figcaption>
+        </figure>
+      ))}
     </div>
   );
 }
@@ -355,17 +414,16 @@ export default function Home() {
             <div className="location-copy">
               <span className="section-label">локация</span>
               <h2 className="section-title">Загородный формат</h2>
-              <p className="address-line">Адрес будет добавлен</p>
+              <a
+                className="address-line"
+                href="https://yandex.ru/maps/-/CPGLjENM"
+                target="_blank"
+                rel="noreferrer"
+              >
+                улица Ткацкой Фабрики, 21, Красногорск, Московская область
+              </a>
             </div>
-            <div className="house-photo">
-              <Image
-                src="/images/house.png"
-                alt="Дом, где пройдёт свадебный праздник"
-                width={1119}
-                height={1040}
-                priority
-              />
-            </div>
+            <HouseCarousel />
           </div>
         </section>
 
