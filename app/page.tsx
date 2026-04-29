@@ -284,7 +284,7 @@ function Timeline() {
       >
         <path
           className="timeline-curve-path"
-          d="M382 18C210 42 156 124 218 184C286 248 500 174 562 246C642 338 560 448 430 452C252 456 166 506 228 574C264 620 326 612 380 638"
+          d="M382 18C160 44 104 128 174 198C244 268 538 176 624 266C728 374 646 452 438 456C238 460 92 548 172 636C222 684 312 678 380 690"
           fill="none"
           stroke="currentColor"
           strokeWidth="4"
@@ -340,7 +340,7 @@ function HouseCarousel() {
           key={card.title}
           style={
             {
-              "--card-delay": `${index * -6}s`,
+              "--card-delay": `${index * -5}s`,
               "--image-position": card.position
             } as CSSProperties
           }
@@ -388,7 +388,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="polaroid-row" aria-label="Детские фотографии">
+            <div className="polaroid-row" aria-label="Фотографии жениха и невесты">
               <Polaroid
                 label="невеста"
                 initials="Ю"
@@ -405,9 +405,9 @@ export default function Home() {
           </div>
 
           <div className="names-band">
-            <span>Александр</span>
-            <HeartMark className="names-heart" />
             <span>Юлия</span>
+            <HeartMark className="names-heart" />
+            <span>Александр</span>
           </div>
         </section>
 

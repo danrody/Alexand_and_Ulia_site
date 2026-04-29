@@ -215,9 +215,9 @@ select {
   z-index: 2;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(18px, 4vw, 46px);
+  gap: clamp(20px, 4.4vw, 56px);
   align-items: end;
-  width: min(calc(100% - 12px), 640px);
+  width: min(calc(100% - 12px), 760px);
   margin: clamp(42px, 7vw, 76px) auto 0;
 }
 
@@ -252,14 +252,46 @@ select {
 }
 
 .polaroid-quote {
-  min-height: 3em;
-  margin: 0 0 clamp(10px, 2vw, 16px);
-  color: rgba(59, 47, 38, 0.72);
-  font-size: clamp(1rem, 1.75vw, 1.22rem);
+  position: relative;
+  justify-self: center;
+  width: min(100%, 310px);
+  min-height: 3.2em;
+  margin: 0 0 clamp(14px, 2.4vw, 22px);
+  padding: 10px 16px 12px;
+  border: 1px solid rgba(59, 47, 38, 0.1);
+  border-radius: 16px 16px 16px 5px;
+  background: rgba(255, 250, 243, 0.88);
+  box-shadow: 0 14px 32px rgba(59, 47, 38, 0.1);
+  color: rgba(59, 47, 38, 0.84);
+  font-size: clamp(1.02rem, 1.72vw, 1.24rem);
+  font-weight: 600;
   line-height: 1.34;
   overflow-wrap: anywhere;
   text-align: center;
   transform: none;
+}
+
+.polaroid-quote::after {
+  position: absolute;
+  bottom: -10px;
+  left: 30px;
+  width: 18px;
+  height: 18px;
+  border-right: 1px solid rgba(59, 47, 38, 0.1);
+  border-bottom: 1px solid rgba(59, 47, 38, 0.1);
+  border-bottom-right-radius: 4px;
+  background: rgba(255, 250, 243, 0.88);
+  content: "";
+  transform: rotate(45deg);
+}
+
+.polaroid-stack:nth-child(2) .polaroid-quote {
+  border-radius: 16px 16px 5px 16px;
+}
+
+.polaroid-stack:nth-child(2) .polaroid-quote::after {
+  right: 30px;
+  left: auto;
 }
 
 .photo-placeholder {
@@ -594,10 +626,10 @@ select {
 .timeline-wrap {
   position: relative;
   display: grid;
-  gap: 34px;
-  min-height: 700px;
+  gap: 42px;
+  min-height: 760px;
   margin-top: 52px;
-  padding: 34px 0 126px;
+  padding: 34px 0 132px;
 }
 
 .timeline-item {
@@ -606,16 +638,16 @@ select {
   display: grid;
   gap: 13px;
   justify-items: center;
-  min-height: 146px;
+  min-height: 158px;
   padding: 10px clamp(16px, 5vw, 54px);
   text-align: center;
 }
 
 .timeline-curve {
   position: absolute;
-  inset: 0;
+  inset: -6px -22px 0;
   z-index: 0;
-  width: 100%;
+  width: calc(100% + 44px);
   height: 100%;
   color: rgba(255, 250, 243, 0.78);
   pointer-events: none;
@@ -630,12 +662,12 @@ select {
 
 .timeline-finish-heart {
   position: absolute;
-  bottom: 22px;
+  bottom: 8px;
   left: 50%;
   z-index: 1;
   width: 76px;
   height: 66px;
-  color: rgba(255, 250, 243, 0.78);
+  color: #fffaf3;
   filter: drop-shadow(0 10px 20px rgba(39, 35, 29, 0.08));
   transform: translateX(-50%) rotate(-6deg);
 }
@@ -644,8 +676,8 @@ select {
   position: relative;
   display: grid;
   justify-self: center;
-  min-width: clamp(148px, 21vw, 214px);
-  padding: clamp(18px, 2.8vw, 26px) clamp(28px, 4vw, 42px);
+  min-width: clamp(160px, 22vw, 226px);
+  padding: clamp(20px, 3vw, 28px) clamp(32px, 4.4vw, 48px);
   border-radius: 999px;
   background:
     radial-gradient(ellipse at 50% 50%, rgba(105, 116, 95, 0.98), rgba(105, 116, 95, 0.88) 64%, rgba(105, 116, 95, 0) 67%),
@@ -661,10 +693,14 @@ select {
 }
 
 .timeline-copy {
+  position: relative;
   max-width: 560px;
-  padding: 2px 16px 5px;
-  background: radial-gradient(ellipse at center, rgba(105, 116, 95, 0.9), rgba(105, 116, 95, 0) 74%);
+  padding: 4px 18px 8px;
   justify-self: center;
+}
+
+.timeline-copy::before {
+  display: none;
 }
 
 .timeline-item h3 {
@@ -743,7 +779,7 @@ select {
   background: #fffaf3;
   box-shadow: 0 28px 78px rgba(59, 47, 38, 0.16);
   transform-origin: center 82%;
-  animation: house-card-cycle 18s ease-in-out infinite;
+  animation: house-card-cycle 15s cubic-bezier(0.45, 0, 0.2, 1) infinite;
   animation-delay: var(--card-delay, 0s);
   will-change: transform, opacity;
 }
@@ -761,6 +797,8 @@ select {
 .house-card img {
   width: 100%;
   height: 100%;
+  animation: house-image-drift 15s ease-in-out infinite;
+  animation-delay: var(--card-delay, 0s);
   object-fit: cover;
   object-position: var(--image-position, center);
 }
@@ -793,6 +831,10 @@ select {
 }
 
 .house-carousel:hover .house-card {
+  animation-play-state: paused;
+}
+
+.house-carousel:hover .house-card img {
   animation-play-state: paused;
 }
 
@@ -1105,27 +1147,48 @@ select {
 
 @keyframes house-card-cycle {
   0%,
-  26% {
+  24% {
     z-index: 4;
     opacity: 1;
     transform: translate3d(0, 0, 0) rotate(1deg) scale(1);
   }
-  33%,
-  59% {
+  31% {
+    z-index: 4;
+    opacity: 0;
+    transform: translate3d(56px, 0, 28px) rotate(3deg) scale(1.02);
+  }
+  32%,
+  57% {
     z-index: 3;
     opacity: 0.88;
-    transform: translate3d(18px, 18px, -44px) rotate(4deg) scale(0.96);
+    transform: translate3d(22px, 18px, -44px) rotate(4deg) scale(0.96);
   }
-  66%,
-  92% {
+  64%,
+  91% {
     z-index: 2;
     opacity: 0.66;
-    transform: translate3d(-16px, 28px, -84px) rotate(-3deg) scale(0.92);
+    transform: translate3d(-18px, 28px, -84px) rotate(-3deg) scale(0.92);
   }
   100% {
     z-index: 4;
     opacity: 1;
     transform: translate3d(0, 0, 0) rotate(1deg) scale(1);
+  }
+}
+
+@keyframes house-image-drift {
+  0%,
+  24% {
+    transform: scale(1.035) translateX(0);
+  }
+  31% {
+    transform: scale(1.055) translateX(-10px);
+  }
+  64% {
+    transform: scale(1.02) translateX(8px);
+  }
+  100% {
+    transform: scale(1.035) translateX(0);
   }
 }
 
@@ -1178,7 +1241,7 @@ select {
   }
 
   .hero-section {
-    min-height: clamp(720px, 100svh, 860px);
+    min-height: clamp(780px, 108svh, 930px);
     padding-right: 16px;
     padding-left: 16px;
   }
@@ -1198,8 +1261,8 @@ select {
 
   .hero-copy {
     width: 100%;
-    max-width: 320px;
-    margin-top: clamp(46px, 12svh, 72px);
+    max-width: 350px;
+    margin-top: clamp(38px, 10svh, 66px);
   }
 
   .hero-copy h1 {
@@ -1213,10 +1276,10 @@ select {
   }
 
   .polaroid-row {
-    width: min(calc(100% - 82px), 308px);
-    gap: 16px;
-    margin-top: 38px;
-    transform: translateX(-28px);
+    width: min(100%, 356px);
+    gap: 12px;
+    margin-top: 30px;
+    transform: none;
   }
 
   .polaroid {
@@ -1229,9 +1292,11 @@ select {
   }
 
   .polaroid-quote {
-    min-height: 5.4em;
-    margin-bottom: 8px;
-    font-size: 0.96rem;
+    width: 100%;
+    min-height: 5.7em;
+    margin-bottom: 10px;
+    padding: 8px 7px 9px;
+    font-size: 0.88rem;
     line-height: 1.34;
   }
 
@@ -1241,9 +1306,9 @@ select {
   }
 
   .names-band {
-    padding-top: 24px;
+    padding-top: 20px;
     gap: 10px;
-    font-size: clamp(1.28rem, 6.4vw, 1.72rem);
+    font-size: clamp(1.34rem, 6.8vw, 1.86rem);
   }
 
   .hero-ribbon {
@@ -1265,36 +1330,38 @@ select {
   }
 
   .timeline-wrap {
-    gap: 28px;
-    min-height: 700px;
-    padding: 26px 0 118px;
+    gap: 34px;
+    min-height: 760px;
+    padding: 26px 0 132px;
   }
 
   .timeline-curve {
-    inset: 0 -42px 0;
-    width: calc(100% + 84px);
+    inset: 0 -58px 0;
+    width: calc(100% + 116px);
   }
 
   .timeline-item {
     gap: 10px;
-    min-height: 150px;
+    min-height: 160px;
     padding-right: 0;
     padding-left: 0;
   }
 
   .timeline-time-wrap {
-    min-width: 124px;
-    padding: 16px 22px;
+    min-width: 136px;
+    padding: 17px 25px;
   }
 
   .timeline-finish-heart {
-    bottom: 24px;
+    bottom: 18px;
     width: 72px;
     height: 63px;
   }
 
   .timeline-copy {
-    max-width: 290px;
+    max-width: 306px;
+    padding-right: 14px;
+    padding-left: 14px;
   }
 
   .details-note,
