@@ -21,13 +21,10 @@ const timeline = [
     time: "17:00",
     title: "церемония",
     text: "самый важный момент дня"
-  },
-  {
-    time: "далее",
-    title: "еда, веселье, празднования",
-    text: ""
   }
 ];
+
+const timelineDays = ["27", "28", "29", "30", "1"];
 
 const houseCards = [
   {
@@ -202,24 +199,44 @@ function LeafSprig({ className = "" }: { className?: string }) {
 
 function Polaroid({
   label,
-  initials,
+  image,
+  alt,
+  width,
+  height,
   quote,
-  rotate
+  rotate,
+  position = "center"
 }: {
   label: string;
-  initials: string;
+  image: string;
+  alt: string;
+  width: number;
+  height: number;
   quote: string;
   rotate: string;
+  position?: string;
 }) {
   return (
     <div className="polaroid-stack">
       <p className="polaroid-quote">{quote}</p>
       <figure
         className="polaroid"
-        style={{ "--polaroid-rotate": rotate } as CSSProperties}
+        style={
+          {
+            "--polaroid-rotate": rotate,
+            "--photo-position": position
+          } as CSSProperties
+        }
       >
         <div className="photo-placeholder">
-          <span>{initials}</span>
+          <Image
+            src={image}
+            alt={alt}
+            width={width}
+            height={height}
+            priority
+            sizes="(max-width: 560px) 44vw, 340px"
+          />
         </div>
         <figcaption>{label}</figcaption>
       </figure>
@@ -275,31 +292,42 @@ function DressPalette() {
 
 function Timeline() {
   return (
-    <div className="timeline-wrap">
+    <div className="timeline-wrap" aria-label="План свадебного вечера">
+      <div className="timeline-date-row" aria-label="Дата праздника">
+        {timelineDays.map((day) =>
+          day === "29" ? (
+            <div className="timeline-heart-day" key={day}>
+              <FilledHeart />
+              <span>{day}</span>
+            </div>
+          ) : (
+            <span className="timeline-date-box" key={day}>
+              {day}
+            </span>
+          )
+        )}
+      </div>
       <svg
         className="timeline-curve"
-        viewBox="0 0 760 720"
+        viewBox="0 0 760 760"
         preserveAspectRatio="none"
         aria-hidden="true"
       >
         <path
           className="timeline-curve-path"
-          d="M382 18C160 44 104 128 174 198C244 268 538 176 624 266C728 374 646 452 438 456C238 460 92 548 172 636C222 684 312 678 380 690"
+          d="M380 84C522 160 574 258 504 352C450 420 332 432 238 464C92 514 72 620 168 662C284 716 438 654 620 718"
           fill="none"
           stroke="currentColor"
           strokeWidth="4"
           strokeLinecap="round"
         />
       </svg>
-      <FilledHeart className="timeline-finish-heart" />
       {timeline.map((item) => (
         <article className="timeline-item" key={item.time}>
-          <div className="timeline-time-wrap">
-            <time>{item.time}</time>
-          </div>
           <div className="timeline-copy">
+            <time>{item.time}</time>
             <h3>{item.title}</h3>
-            {item.text && <p>{item.text}</p>}
+            <p>{item.text}</p>
           </div>
         </article>
       ))}
@@ -391,15 +419,23 @@ export default function Home() {
             <div className="polaroid-row" aria-label="Фотографии жениха и невесты">
               <Polaroid
                 label="невеста"
-                initials="Ю"
+                image="/images/bride-child.png"
+                alt="Юлия в детстве"
+                width={493}
+                height={524}
                 quote="- интересно, кто будет моим мужем, когда я вырасту?"
                 rotate="-7deg"
+                position="center 48%"
               />
               <Polaroid
                 label="жених"
-                initials="А"
+                image="/images/groom-child.png"
+                alt="Александр в детстве"
+                width={1034}
+                height={1280}
                 quote="- им буду я!"
                 rotate="5deg"
+                position="center 42%"
               />
             </div>
           </div>
@@ -439,10 +475,8 @@ export default function Home() {
         </section>
 
         <section className="timing-section section-pad flow-section">
-          <FlowRibbon className="timing-ribbon" />
           <div className="section-inner timing-inner reveal-stack">
             <span className="section-label">тайминг</span>
-            <h2 className="section-title">Вечер без спешки</h2>
             <Timeline />
           </div>
         </section>
@@ -466,7 +500,6 @@ export default function Home() {
         </section>
 
         <section className="dress-section section-pad flow-section">
-          <LeafSprig className="dress-sprig" />
           <div className="section-inner dress-layout reveal-stack">
             <div className="dress-copy">
               <p>
