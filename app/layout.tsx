@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Александр и Юлия | Свадебное приглашение",
-  description: "Приглашение на день рождения семьи Александра и Юлии 29.06.2026"
+  description: "Приглашение на день рождения семьи Александра и Юлии"
 };
 
 export const viewport: Viewport = {

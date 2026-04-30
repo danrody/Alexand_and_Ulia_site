@@ -396,6 +396,10 @@ select {
   line-height: 1.08;
 }
 
+.intro-title {
+  max-width: 800px;
+}
+
 .intro-section {
   background:
     linear-gradient(180deg, rgba(133, 141, 117, 0.92) 0%, rgba(237, 228, 214, 0.92) 18%, var(--linen) 100%);
@@ -466,7 +470,7 @@ select {
 }
 
 .calendar-copy p {
-  margin: 26px 0 0;
+  margin: 0;
   max-width: 560px;
   color: rgba(59, 47, 38, 0.72);
   font-size: clamp(1rem, 1.45vw, 1.18rem);
@@ -700,6 +704,25 @@ select {
   font-size: clamp(1.05rem, 2.3vw, 1.32rem);
   line-height: 1;
   transform: translate(-50%, -50%) rotate(3deg);
+}
+
+.timeline-end-heart {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  z-index: 3;
+  display: grid;
+  width: clamp(58px, 9vw, 74px);
+  height: clamp(50px, 7.8vw, 64px);
+  place-items: center;
+  color: #9d2936;
+  filter: drop-shadow(0 14px 22px rgba(59, 47, 38, 0.14));
+  transform: translateX(-50%) rotate(4deg);
+}
+
+.timeline-end-heart svg {
+  width: 100%;
+  height: 100%;
 }
 
 .timeline-copy {
@@ -1232,7 +1255,17 @@ select {
     grid-template-columns: 1fr;
   }
 
+  .calendar-copy {
+    order: 2;
+    text-align: center;
+  }
+
+  .calendar-copy p {
+    margin-inline: auto;
+  }
+
   .calendar-shell {
+    order: 1;
     justify-self: stretch;
     width: 100%;
     max-width: 520px;

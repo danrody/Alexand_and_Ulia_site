@@ -15,12 +15,12 @@ const timeline = [
   {
     time: "16:00",
     title: "сбор гостей",
-    text: "встречаемся, обнимаемся и настраиваемся на тёплый вечер"
+    text: "Время пролетит незаметно за игристым и общением с другими гостями"
   },
   {
     time: "17:00",
     title: "церемония",
-    text: "самый важный момент дня"
+    text: "Будет много танцев, веселья, поздравлений и, конечно, любви"
   }
 ];
 
@@ -275,7 +275,6 @@ function Calendar() {
           </div>
         ))}
       </div>
-      <p className="calendar-note">собираемся 29 июня</p>
     </div>
   );
 }
@@ -293,7 +292,7 @@ function DressPalette() {
 function Timeline() {
   return (
     <div className="timeline-wrap" aria-label="План свадебного вечера">
-      <div className="timeline-date-row" aria-label="Дата праздника">
+      <div className="timeline-date-row" aria-label="Календарная отметка">
         {timelineDays.map((day) =>
           day === "29" ? (
             <div className="timeline-heart-day" key={day}>
@@ -315,13 +314,16 @@ function Timeline() {
       >
         <path
           className="timeline-curve-path"
-          d="M380 84C522 160 574 258 504 352C450 420 332 432 238 464C92 514 72 620 168 662C284 716 438 654 620 718"
+          d="M380 84C522 160 574 258 504 352C450 420 332 432 238 464C92 514 72 620 168 662C282 714 480 642 380 704"
           fill="none"
           stroke="currentColor"
           strokeWidth="4"
           strokeLinecap="round"
         />
       </svg>
+      <div className="timeline-end-heart" aria-hidden="true">
+        <FilledHeart />
+      </div>
       {timeline.map((item) => (
         <article className="timeline-item" key={item.time}>
           <div className="timeline-copy">
@@ -450,11 +452,11 @@ export default function Home() {
         <section className="intro-section section-pad flow-section">
           <LeafSprig className="intro-sprig" />
           <div className="section-inner intro-inner reveal-stack">
-            <div className="section-label">дорогие друзья и близкие</div>
+            <h2 className="section-title intro-title">Дорогие друзья и близкие!</h2>
             <div className="intro-text">
               <p>
-                <strong>29.06.2026</strong> приглашаем вас отметить день рождения
-                нашей семьи в тёплой загородной атмосфере.
+                Приглашаем вас отметить день рождения нашей семьи в тёплой
+                загородной атмосфере.
               </p>
             </div>
           </div>
@@ -463,8 +465,6 @@ export default function Home() {
         <section className="calendar-section section-pad flow-section">
           <div className="section-inner calendar-layout reveal-stack">
             <div className="calendar-copy">
-              <span className="section-label">дата праздника</span>
-              <h2 className="section-title">29.06.2026</h2>
               <p>
                 Отметьте этот понедельник в календаре: нас ждёт вечер с церемонией,
                 едой, весельем и празднованием.
