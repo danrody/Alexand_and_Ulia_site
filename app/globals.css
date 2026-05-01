@@ -249,9 +249,11 @@ select {
 
 .polaroid-quote {
   position: relative;
+  display: grid;
   justify-self: center;
   width: min(100%, 310px);
   min-height: 3.2em;
+  place-items: center;
   margin: 0 0 clamp(14px, 2.4vw, 22px);
   padding: 10px 16px 12px;
   border: 1px solid rgba(59, 47, 38, 0.1);
@@ -627,6 +629,7 @@ select {
 .timeline-item:nth-of-type(1) {
   top: 174px;
   left: clamp(12px, 8vw, 58px);
+  width: min(100%, 292px);
 }
 
 .timeline-item:nth-of-type(2) {
@@ -824,7 +827,7 @@ select {
   background: #fffaf3;
   box-shadow: 0 28px 78px rgba(59, 47, 38, 0.16);
   transform-origin: center 82%;
-  animation: house-card-cycle 15s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+  animation: house-card-cycle 12s cubic-bezier(0.45, 0, 0.2, 1) infinite;
   animation-delay: var(--card-delay, 0s);
   will-change: transform, opacity;
 }
@@ -842,7 +845,7 @@ select {
 .house-card img {
   width: 100%;
   height: 100%;
-  animation: house-image-drift 15s ease-in-out infinite;
+  animation: house-image-drift 12s ease-in-out infinite;
   animation-delay: var(--card-delay, 0s);
   object-fit: cover;
   object-position: var(--image-position, center);
@@ -986,46 +989,87 @@ select {
   align-items: center;
 }
 
+.mini-link-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 30px;
+  padding: 6px 11px;
+  border: 1px solid rgba(80, 103, 68, 0.22);
+  border-radius: 6px;
+  background: rgba(255, 250, 243, 0.72);
+  color: rgba(59, 47, 38, 0.7);
+  font-size: 0.78rem;
+  line-height: 1.1;
+  text-decoration: none;
+  transition:
+    border-color 0.22s ease,
+    background 0.22s ease,
+    color 0.22s ease,
+    transform 0.22s ease;
+}
+
+.mini-link-button:hover,
+.mini-link-button:focus-visible {
+  border-color: rgba(80, 103, 68, 0.52);
+  background: rgba(255, 250, 243, 0.94);
+  color: var(--moss);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.route-button {
+  margin-top: 14px;
+}
+
+.qr-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(126px, 1fr));
+  gap: 14px;
+}
+
 .qr-frame {
   display: grid;
-  gap: 10px;
+  gap: 8px;
   justify-items: center;
-  padding: 14px;
+  padding: 12px;
   border-radius: 8px;
   background: var(--paper);
   color: inherit;
   box-shadow: 0 18px 40px rgba(59, 47, 38, 0.12);
-  text-decoration: none;
   transform: rotate(2deg);
   transition:
     box-shadow 0.25s ease,
     transform 0.25s ease;
 }
 
-.qr-frame:hover,
-.qr-frame:focus-visible {
+.qr-frame:nth-child(2) {
+  transform: rotate(-1deg);
+}
+
+.qr-frame:hover {
   box-shadow: 0 24px 54px rgba(59, 47, 38, 0.18);
-  outline: none;
   transform: rotate(1deg) translateY(-4px);
 }
 
+.qr-frame:nth-child(2):hover {
+  transform: rotate(-0.5deg) translateY(-4px);
+}
+
 .qr-code {
-  display: grid;
-  grid-template-columns: repeat(13, 8px);
-  gap: 3px;
-  padding: 12px;
+  display: block;
+  width: 132px;
+  aspect-ratio: 1;
+  padding: 8px;
   border: 1px solid rgba(59, 47, 38, 0.12);
   background: #fffdf8;
 }
 
-.qr-code span {
-  width: 8px;
-  aspect-ratio: 1;
-  background: transparent;
-}
-
-.qr-code .active {
-  background: var(--bark);
+.qr-code svg {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .qr-caption {
@@ -1285,7 +1329,7 @@ select {
     grid-template-columns: 1fr;
   }
 
-  .qr-frame {
+  .qr-list {
     justify-self: center;
   }
 }
@@ -1397,6 +1441,7 @@ select {
   .timeline-item:nth-of-type(1) {
     top: 158px;
     left: 2px;
+    width: min(68vw, 258px);
   }
 
   .timeline-item:nth-of-type(2) {
@@ -1415,13 +1460,13 @@ select {
     padding: 28px 0;
   }
 
-  .qr-code {
-    grid-template-columns: repeat(13, 7px);
-    gap: 2px;
+  .qr-list {
+    grid-template-columns: repeat(2, minmax(118px, 1fr));
+    width: 100%;
   }
 
-  .qr-code span {
-    width: 7px;
+  .qr-code {
+    width: 118px;
   }
 }
 

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import QRCode from "qrcode";
 import type { CSSProperties } from "react";
 
 const palette = [
@@ -15,7 +16,7 @@ const timeline = [
   {
     time: "16:00",
     title: "сбор гостей",
-    text: "Время пролетит незаметно за игристым и общением с другими гостями"
+    text: "Встречаемся, обнимаемся и настраиваемся на тёплый вечер"
   },
   {
     time: "17:00",
@@ -56,24 +57,40 @@ const houseCards = [
   }
 ];
 
-const qrPattern = [
-  "1111111001111",
-  "1000001000101",
-  "1011101010111",
-  "1011101001001",
-  "1011101011101",
-  "1000001010011",
-  "1111111010101",
-  "0000000011010",
-  "1101011110101",
-  "0100110001110",
-  "1110101110001",
-  "1001100101011",
-  "1110111011101"
-];
+const routeUrl = "https://yandex.ru/maps/-/CPGLjENM";
 
-// Replace this with the real Telegram invite URL when it is available.
-const telegramChatUrl = "https://t.me/";
+const chatLinks = [
+  {
+    name: "Telegram",
+    url: "https://t.me/+5pN6foXZLho3ZTRi"
+  },
+  {
+    name: "MAX",
+    url: "https://max.ru/join/FtfPvTa1jNBwqa57JRcJRh2p8QLnrN0xqss2AiN0h5k"
+  }
+] as const;
+
+type ChatQr = (typeof chatLinks)[number] & {
+  qrSvg: string;
+};
+
+async function createChatQrs(): Promise<ChatQr[]> {
+  return Promise.all(
+    chatLinks.map(async (chat) => ({
+      ...chat,
+      qrSvg: await QRCode.toString(chat.url, {
+        color: {
+          dark: "#3b2f26",
+          light: "#fffdf8"
+        },
+        errorCorrectionLevel: "M",
+        margin: 1,
+        type: "svg",
+        width: 132
+      })
+    }))
+  );
+}
 
 function HeartMark({ className = "" }: { className?: string }) {
   return (
@@ -314,7 +331,7 @@ function Timeline() {
       >
         <path
           className="timeline-curve-path"
-          d="M380 84C522 160 574 258 504 352C450 420 332 432 238 464C92 514 72 620 168 662C282 714 480 642 380 704"
+          d="M380 58C522 150 574 258 504 352C450 420 332 432 238 464C92 514 72 620 168 662C282 714 480 642 380 704"
           fill="none"
           stroke="currentColor"
           strokeWidth="4"
@@ -337,27 +354,18 @@ function Timeline() {
   );
 }
 
-function QrCode() {
+function QrCode({ name, url, qrSvg }: ChatQr) {
   return (
-    <a
+    <article
       className="qr-frame"
-      href={telegramChatUrl}
-      target="_blank"
-      rel="noreferrer"
-      aria-label="Открыть Telegram-чат праздника"
+      aria-label={`QR-код для чата ${name}`}
     >
-      <div className="qr-code">
-        {qrPattern.flatMap((row, rowIndex) =>
-          row.split("").map((cell, columnIndex) => (
-            <span
-              key={`${rowIndex}-${columnIndex}`}
-              className={cell === "1" ? "active" : ""}
-            />
-          ))
-        )}
-      </div>
-      <span className="qr-caption">telegram</span>
-    </a>
+      <div className="qr-code" dangerouslySetInnerHTML={{ __html: qrSvg }} />
+      <span className="qr-caption">{name}</span>
+      <a className="mini-link-button" href={url} target="_blank" rel="noreferrer">
+        добавиться в чат
+      </a>
+    </article>
   );
 }
 
@@ -370,7 +378,7 @@ function HouseCarousel() {
           key={card.title}
           style={
             {
-              "--card-delay": `${index * -5}s`,
+              "--card-delay": `${index * -4}s`,
               "--image-position": card.position
             } as CSSProperties
           }
@@ -393,7 +401,9 @@ function HouseCarousel() {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const chatQrs = await createChatQrs();
+
   return (
     <main className="site-root min-h-screen text-bark">
       <div className="ambient ambient-one" aria-hidden="true" />
@@ -466,8 +476,8 @@ export default function Home() {
           <div className="section-inner calendar-layout reveal-stack">
             <div className="calendar-copy">
               <p>
-                Отметьте этот понедельник в календаре: нас ждёт вечер с церемонией,
-                едой, весельем и празднованием.
+                Отметьте этот понедельник в календаре, день, который мы хотим
+                разделить вместе с вами 🤍.
               </p>
             </div>
             <Calendar />
@@ -485,14 +495,21 @@ export default function Home() {
           <div className="section-inner location-layout reveal-stack">
             <div className="location-copy">
               <span className="section-label">локация</span>
-              <h2 className="section-title">Загородный формат</h2>
               <a
                 className="address-line"
-                href="https://yandex.ru/maps/-/CPGLjENM"
+                href={routeUrl}
                 target="_blank"
                 rel="noreferrer"
               >
                 улица Ткацкой Фабрики, 21, Красногорск, Московская область
+              </a>
+              <a
+                className="mini-link-button route-button"
+                href={routeUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                проложить маршрут
               </a>
             </div>
             <HouseCarousel />
@@ -525,11 +542,15 @@ export default function Home() {
               <div>
                 <span className="section-label">чат</span>
                 <p>
-                  Мы создали Telegram-чат праздника: там будет вся актуальная
-                  информация, а после мероприятия можно будет поделиться фото и видео.
+                  Мы создали чаты праздника: там будет вся актуальная информация,
+                  а после мероприятия можно будет поделиться фото и видео.
                 </p>
               </div>
-              <QrCode />
+              <div className="qr-list">
+                {chatQrs.map((chat) => (
+                  <QrCode key={chat.name} {...chat} />
+                ))}
+              </div>
             </div>
           </div>
         </section>
